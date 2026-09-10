@@ -696,6 +696,7 @@ function _commitFinish() {
   st.sessions.push(d);
   st.draft = null;
   stopRestTimer(); stopElapsedTimer(); releaseWakeLock();
+  $('#workoutActionBar')?.classList.add('hidden');
   saveState().then(updateSaveStatus);
   show('history');
 }
@@ -705,6 +706,7 @@ function discardWorkout() {
   const st = getState();
   st.draft = null;
   stopRestTimer(); stopElapsedTimer(); releaseWakeLock();
+  $('#workoutActionBar')?.classList.add('hidden');
   saveState().then(updateSaveStatus);
   show('home');
 }
@@ -723,10 +725,12 @@ function _updateRing(remaining) {
   const offset   = RING_CIRCUMF * (1 - fraction);
   prog.style.strokeDashoffset = offset;
 
-  // Dot position: travels clockwise from top (−90° offset already applied by SVG rotate)
-  const angle = (1 - fraction) * 2 * Math.PI;
-  const cx    = 100 + RING_R * Math.sin(angle);
-  const cy    = 100 - RING_R * Math.cos(angle);
+  // The SVG is rotated -90° via CSS so the arc starts at 12 o'clock visually.
+  // In SVG coordinates the arc starts at 3 o'clock (angle 0).
+  // The dot must follow the arc end-point in SVG coordinates.
+  const angle = fraction * 2 * Math.PI;   // clockwise from 3 o'clock in SVG space
+  const cx    = 100 + RING_R * Math.cos(angle);
+  const cy    = 100 + RING_R * Math.sin(angle);
   dot.setAttribute('cx', cx.toFixed(2));
   dot.setAttribute('cy', cy.toFixed(2));
 }
@@ -749,6 +753,8 @@ function stopRestTimer() {
   clearInterval(_restTimerId); _restTimerId = null;
   _timerPaused = false;
   $('#timer').classList.remove('on');
+  const pauseBtn = $('#timerPause');
+  if (pauseBtn) pauseBtn.textContent = '⏸';
   const st = getState();
   if (st?.draft) { st.draft.timerEndsAt = null; st.draft._timerContext = null; }
 }

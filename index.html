@@ -375,13 +375,15 @@ html[data-theme=dark] .pr-icon{background:#2e1065}
 
 /* Activity calendar */
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.cal-dow{text-align:center;font-size:10px;font-weight:700;color:var(--muted);padding:4px 0;letter-spacing:.04em;text-transform:uppercase}
+#calendarContainer{width:100%;min-width:0;overflow:hidden}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;width:100%;min-width:0}
+.cal-dow{text-align:center;font-size:10px;font-weight:700;color:var(--muted);padding:4px 0;letter-spacing:.04em;text-transform:uppercase;min-width:0}
 .cal-cell{
   aspect-ratio:1;display:flex;flex-direction:column;align-items:center;
   justify-content:center;border-radius:8px;cursor:pointer;
   transition:background .15s;position:relative;
-  font-size:13px;font-weight:600;
+  font-size:13px;font-weight:600;min-width:0;width:100%;
+  overflow:hidden;
 }
 .cal-cell:hover{background:var(--soft)}
 .cal-cell.empty{cursor:default}
